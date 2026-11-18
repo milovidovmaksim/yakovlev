@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Статистика сайта — ИП Яковлев</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23A98456'/%3E%3Crect x='9' y='9' width='14' height='14' rx='3' fill='%23F5F1EA'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f1ea;
+      --ink: #1f1b16;
+      --muted: #6f665c;
+      --accent: #a98456;
+      --accent-dark: #8c6a3f;
+      --line: #e2d9cc;
+      --card: #fffdf9;
+      --bar: #d9cdb9;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .mark {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: var(--accent);
+      box-shadow: inset 0 0 0 5px var(--bg);
+    }
+
+    .brand { font-weight: 600; }
+    .muted { color: var(--muted); }
+
+    h1 {
+      font-size: 24px;
+      line-height: 1.25;
+      margin: 0 0 18px;
+      font-weight: 600;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .top h1 { margin: 0; }
+
+    .period {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      background: #ece4d7;
+      border-radius: 999px;
+    }
+
+    .period button {
+      font: inherit;
+      font-size: 14px;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      border-radius: 999px;
+      padding: 7px 14px;
+      cursor: pointer;
+    }
+
+    .period button:hover { color: var(--ink); }
+
+    .period button.is-active {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 1px 2px rgba(31, 27, 22, 0.12);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card--accent {
+      border-color: #d8c3a4;
+      background: #fdf7ec;
+    }
+
+    .label {
+      margin: 0 0 10px;
+      font-size: 13px;
+      line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .value {
+      margin: 0 0 6px;
+      font-size: 56px;
+      line-height: 1;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .card--accent .value { color: var(--accent-dark); }
+
+    .hint {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 18px 20px 14px;
+      margin-top: 14px;
+    }
+
+    .panel__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .panel h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .legend {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .legend__v { background: var(--bar); }
+    .legend__c { background: var(--accent); margin-left: 8px; }
+
+    .chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 150px;
+      padding-top: 4px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .bar-group {
+      flex: 1 1 0;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 2px;
+      border-radius: 4px 4px 0 0;
+      min-width: 0;
+    }
+
+    .bar-group:hover { background: #f6efe3; }
+
+    .bar {
+      display: block;
+      width: 46%;
+      min-height: 2px;
+      border-radius: 3px 3px 0 0;
+      transition: height 0.25s ease;
+    }
+
+    .bar--v { background: var(--bar); }
+    .bar--c { background: var(--accent); }
+
+    .chart__axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      padding-top: 6px;
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .link {
+      font: inherit;
+      font-size: 13px;
+      color: var(--accent-dark);
+      background: none;
+      border: 0;
+      border-bottom: 1px dashed currentColor;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .state {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 26px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .state__title {
+      margin: 0 0 8px;
+      font-weight: 600;
+      font-size: 17px;
+    }
+
+    .state__text {
+      margin: 0;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 620px) {
+      .cards { grid-template-columns: 1fr; }
+      .value { font-size: 46px; }
+      h1 { font-size: 21px; }
+      .wrap { padding-top: 24px; }
+      .chart { height: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <span class="mark" aria-hidden="true"></span>
+      <span class="brand">ИП Яковлев</span>
+      <span class="muted">· статистика сайта</span>
+    </header>
+
+    <div class="state" id="state">
+      <p class="state__title" id="stateTitle">Загрузка…</p>
+      <p class="state__text" id="stateText"></p>
+    </div>
+
+    <div id="dashboard" class="hidden">
+      <div class="top">
+        <h1>Сколько людей заходит на сайт</h1>
+        <div class="period" id="period">
+          <button type="button" data-period="1">Сегодня</button>
+          <button type="button" data-period="7" class="is-active">7 дней</button>
+          <button type="button" data-period="30">30 дней</button>
+        </div>
+      </div>
+
+      <div class="cards">
+        <article class="card">
+          <p class="label">Посетители сайта</p>
+          <p class="value" id="vVisitors">—</p>
+          <p class="hint">уникальные посетители</p>
+        </article>
+        <article class="card card--accent">
+          <p class="label">Нажали «Написать в Max»</p>
+          <p class="value" id="vClicks">—</p>
+          <p class="hint" id="vRate">—</p>
+        </article>
+      </div>
+
+      <section class="panel">
+        <div class="panel__head">
+          <h2>По дням</h2>
+          <span class="legend" id="legend">
+            <i class="legend__v"></i>посетители
+            <i class="legend__c"></i>клики в Max
+          </span>
+        </div>
+        <div class="chart" id="chart"></div>
+        <div class="chart__axis"><span id="chartFrom"></span><span id="chartTo"></span></div>
+      </section>
+
+      <footer class="foot">
+        <span id="updated">—</span>
+        <button type="button" class="link" id="refresh">Обновить</button>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var PERIOD = 7;
+      var DATA = null;
+      var DATA_FILE = "assets/data/stats.json";
+
+      function byId(id) {
+        return document.getElementById(id);
+      }
+
+      function formatNumber(value) {
+        return new Intl.NumberFormat("ru-RU").format(value);
+      }
+
+      function formatDay(iso, long) {
+        var parts = iso.split("-").map(Number);
+        var date = new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+        return date.toLocaleDateString(
+          "ru-RU",
+          long
+            ? { day: "numeric", month: "long", timeZone: "UTC" }
+            : { day: "2-digit", month: "2-digit", timeZone: "UTC" }
+        );
+      }
+
+      function readKey() {
+        var hash = location.hash.replace(/^#/, "");
+        var key = "";
+
+        try {
+          key = new URLSearchParams(hash).get("k") || "";
+        } catch (error) {
+          key = "";
+        }
+
+        if (!key) {
+          try {
+            key = new URLSearchParams(location.search).get("k") || "";
+          } catch (error) {
+            key = "";
+          }
+        }
+
+        // Поддерживаем и совсем короткий вид ссылки: /statistika.html#ключ
+        if (!key && hash && hash.indexOf("=") === -1) key = hash;
+
+        return key.trim();
+      }
+
+      function fromBase64(value) {
+        var binary = atob(value);
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return bytes;
+      }
+
+      async function decrypt(bundle, passphrase) {
+        var encoder = new TextEncoder();
+
+        var baseKey = await crypto.subtle.importKey(
+          "raw",
+          encoder.encode(passphrase),
+          "PBKDF2",
+          false,
+          ["deriveKey"]
+        );
+
+        var key = await crypto.subtle.deriveKey(
+          {
+            name: "PBKDF2",
+            salt: fromBase64(bundle.kdf.salt),
+            iterations: bundle.kdf.iterations,
+            hash: bundle.kdf.hash
+          },
+          baseKey,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["decrypt"]
+        );
+
+        var plain = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: fromBase64(bundle.iv) },
+          key,
+          fromBase64(bundle.data)
+        );
+
+        return JSON.parse(new TextDecoder().decode(plain));
+      }
+
+      function showState(title, text) {
+        byId("dashboard").classList.add("hidden");
+        byId("state").classList.remove("hidden");
+        byId("stateTitle").textContent = title;
+        byId("stateText").textContent = text || "";
+      }
+
+      function showDashboard() {
+        byId("state").classList.add("hidden");
+        byId("dashboard").classList.remove("hidden");
+      }
+
+      function sliceDays(count) {
+        return DATA.days.slice(Math.max(0, DATA.days.length - count));
+      }
+
+      function sum(days, field) {
+        return days.reduce(function (total, day) {
+          return total + (day[field] || 0);
+        }, 0);
+      }
+
+      function renderChart(days) {
+        var max = 1;
+        days.forEach(function (day) {
+          if (day.v > max) max = day.v;
+          if (DATA.goal && (day.c || 0) > max) max = day.c;
+        });
+
+        var html = days
+          .map(function (day) {
+            var visitorsHeight = Math.round((day.v / max) * 100);
+            var clicks = day.c || 0;
+            var clicksHeight = DATA.goal ? Math.round((clicks / max) * 100) : 0;
+            var title =
+              formatDay(day.d, true) +
+              ": посетителей " +
+              day.v +
+              (DATA.goal ? ", кликов " + clicks : "");
+
+            return (
+              '<div class="bar-group" title="' + title + '">' +
+              '<span class="bar bar--v" style="height:' + visitorsHeight + '%"></span>' +
+              (DATA.goal
+                ? '<span class="bar bar--c" style="height:' + clicksHeight + '%"></span>'
+                : "") +
+              "</div>"
+            );
+          })
+          .join("");
+
+        byId("chart").innerHTML = html;
+        byId("chartFrom").textContent = formatDay(days[0].d);
+        byId("chartTo").textContent = formatDay(days[days.length - 1].d);
+        byId("legend").classList.toggle("hidden", !DATA.goal);
+      }
+
+      function render() {
+        var days = sliceDays(PERIOD);
+        var visitors = sum(days, "v");
+        var clicks = DATA.goal ? sum(days, "c") : null;
+
+        byId("vVisitors").textContent = formatNumber(visitors);
+        byId("vClicks").textContent = clicks === null ? "—" : formatNumber(clicks);
+
+        if (clicks === null) {
+          byId("vRate").textContent = "цель max_click не найдена в Метрике";
+        } else if (visitors > 0) {
+          var rate = Math.round((clicks / visitors) * 1000) / 10;
+          byId("vRate").textContent =
+            formatNumber(rate) + "% посетителей нажали";
+        } else {
+          byId("vRate").textContent = "за этот период данных пока нет";
+        }
+
+        Array.prototype.forEach.call(
+          document.querySelectorAll("#period button"),
+          function (button) {
+            button.classList.toggle(
+              "is-active",
+              Number(button.getAttribute("data-period")) === PERIOD
+            );
+          }
+        );
+
+        renderChart(days);
+
+        var updated = new Date(DATA.updated);
+        byId("updated").textContent =
+          "Данные на " +
+          updated.toLocaleString("ru-RU", {
+            day: "numeric",
+            month: "long",
+            hour: "2-digit",
+            minute: "2-digit"
+          }) +
+          " · обновляется автоматически";
+      }
+
+      async function load(key) {
+        showState("Загрузка…", "Секунду.");
+
+        var response;
+        try {
+          response = await fetch(DATA_FILE + "?t=" + Date.now(), { cache: "no-store" });
+        } catch (error) {
+          showState(
+            "Не удалось загрузить данные",
+            "Похоже, пропала связь с сайтом. Проверьте интернет и обновите страницу."
+          );
+          return;
+        }
+
+        if (!response.ok) {
+          showState(
+            "Данных пока нет",
+            "Статистика ещё ни разу не собиралась. " +
+              "Первый сбор запускается автоматически в течение часа после настройки, " +
+              "после этого цифры обновляются каждый час."
+          );
+          return;
+        }
+
+        var bundle;
+        try {
+          bundle = await response.json();
+        } catch (error) {
+          showState("Данных пока нет", "Файл статистики пуст или повреждён.");
+          return;
+        }
+
+        var payload;
+        try {
+          payload = await decrypt(bundle, key);
+        } catch (error) {
+          showState(
+            "Ссылка не подходит",
+            "Не удалось расшифровать данные. Скорее всего, ссылка скопирована не целиком — " +
+              "важна и часть после знака #."
+          );
+          return;
+        }
+
+        DATA = payload;
+        showDashboard();
+        render();
+      }
+
+      function init() {
+        var key = readKey();
+
+        if (!key) {
+          showState(
+            "Страница доступна по персональной ссылке",
+            "Откройте ссылку, которую вам прислали, целиком — вместе с частью после знака #."
+          );
+          return;
+        }
+
+        if (!window.crypto || !window.crypto.subtle) {
+          showState(
+            "Браузер не поддерживается",
+            "Откройте ссылку в современном браузере: Chrome, Safari, Firefox, Яндекс Браузер или Edge."
+          );
+          return;
+        }
+
+        byId("period").addEventListener("click", function (event) {
+          var button = event.target.closest("button[data-period]");
+          if (!button) return;
+          PERIOD = Number(button.getAttribute("data-period")) || 7;
+          if (DATA) render();
+        });
+
+        byId("refresh").addEventListener("click", function () {
+          load(key);
+        });
+
+        load(key);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

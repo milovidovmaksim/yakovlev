@@ -472,7 +472,7 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 /* ---------- Услуги ---------- */
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 20px;
 }
 
@@ -735,6 +735,13 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 }
 
 .service-row:last-of-type { border-bottom: 1px solid var(--line); }
+
+.service-row--text {
+  grid-template-columns: 1fr;
+  padding-block: clamp(22px, 3vw, 34px);
+}
+
+.service-row--text .service-row__body { max-width: 720px; }
 
 .service-row:nth-child(even) .service-row__media { order: 2; }
 
