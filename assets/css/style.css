@@ -191,13 +191,13 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 .nav {
   display: flex;
   align-items: center;
-  gap: 26px;
+  gap: 22px;
 }
 
 .nav a {
   position: relative;
   font-weight: 500;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   color: rgba(243, 239, 232, 0.68);
   transition: color 0.2s ease;
   padding: 6px 0;
@@ -1054,6 +1054,149 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
   max-width: 46ch;
 }
 
+.contact-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+}
+
+.contact-card__email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.contact-card__email:hover {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+.contact-card__email svg { color: var(--brass); }
+
+/* ---------- Реквизиты ---------- */
+.req-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.85fr);
+  gap: clamp(20px, 3vw, 32px);
+  align-items: start;
+}
+
+.req-table {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.req-table dl { margin: 0; }
+
+.req-table__row {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 8px 24px;
+  padding: 16px clamp(18px, 2.4vw, 26px);
+  border-top: 1px solid var(--line);
+}
+
+.req-table__row:first-child { border-top: 0; }
+
+.req-table dt {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.req-table dd {
+  margin: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.req-table dd a {
+  border-bottom: 1px solid var(--line);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.req-table dd a:hover {
+  color: var(--brass-dark);
+  border-bottom-color: var(--brass);
+}
+
+.req-doc {
+  position: sticky;
+  top: calc(var(--header-h) + 20px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(22px, 3vw, 30px);
+}
+
+.req-doc h2 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  margin-bottom: 10px;
+}
+
+.req-doc p {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.req-doc__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.req-doc__actions .btn { width: 100%; }
+
+.req-doc__meta {
+  margin: 14px 0 0 !important;
+  font-size: 0.82rem !important;
+}
+
+.req-copy {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.req-copy.is-copied {
+  border-color: var(--brass);
+  color: var(--brass-dark);
+}
+
+.req-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px 32px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(24px, 4vw, 40px);
+}
+
+.req-note h2 { margin-bottom: 10px; }
+
+.req-note p {
+  color: var(--muted);
+  max-width: 56ch;
+  margin-bottom: 0;
+}
+
+.req-note__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+}
+
+
 .req {
   margin-top: 28px;
   padding-top: 24px;
@@ -1096,16 +1239,13 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
 
 /* ---------- Адаптив ---------- */
 @media (max-width: 1024px) {
+  .nav { display: none; }
+  .header__phone { display: none; }
+  .burger { display: block; }
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .gallery { columns: 2; }
   .footer__grid { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 960px) {
-  .nav { display: none; }
-  .header__phone { display: none; }
-  .burger { display: block; }
 }
 
 @media (max-width: 860px) {
@@ -1116,6 +1256,8 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
   .preview-grid { grid-template-columns: 1fr; }
   .service-row:nth-child(even) .service-row__media { order: 0; }
   .hero__badge { left: 16px; }
+  .req-layout { grid-template-columns: 1fr; }
+  .req-doc { position: static; }
 }
 
 @media (max-width: 640px) {
@@ -1131,4 +1273,28 @@ section[id] { scroll-margin-top: calc(var(--header-h) + 16px); }
   .process__num { width: 44px; height: 44px; font-size: 0.85rem; }
   .process__step::before { left: 21px; top: 44px; }
   .process__body h3 { margin-top: 6px; }
+  .req-table__row { grid-template-columns: 1fr; gap: 4px; }
+  .req-note__actions { width: 100%; }
+  .req-note__actions .btn { width: 100%; }
+}
+
+/* ---------- Печать карточки предприятия ---------- */
+@media print {
+  .header,
+  .mobile-menu,
+  .footer,
+  .req-doc,
+  .req-help,
+  .page-head p,
+  .page-head .kicker { display: none !important; }
+
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .container { max-width: none; padding: 0; }
+  .section--tight { padding: 0; }
+  .page-head { padding: 0 0 18px; }
+  .page-head p { color: #444; }
+  .req-layout { display: block; }
+  .req-table { border-color: #ccc; }
+  body { background: #fff; color: #000; }
+  a { color: inherit; text-decoration: none; }
 }

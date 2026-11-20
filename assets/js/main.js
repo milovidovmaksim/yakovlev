@@ -185,6 +185,44 @@
     });
   });
 
+  /* ---------- Копирование реквизитов ---------- */
+  document.querySelectorAll("[data-copy]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var text = btn.getAttribute("data-copy") || "";
+      var label = btn.querySelector("span");
+      var original = label ? label.textContent : btn.textContent;
+
+      function done() {
+        btn.classList.add("is-copied");
+        if (label) label.textContent = "Скопировано";
+        window.setTimeout(function () {
+          btn.classList.remove("is-copied");
+          if (label) label.textContent = original;
+        }, 2000);
+      }
+
+      function fallback() {
+        var area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.top = "-1000px";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        try { document.execCommand("copy"); } catch (e) {}
+        document.body.removeChild(area);
+        done();
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
+
   /* ---------- Год в футере ---------- */
   var yearEl = document.querySelector("[data-year]");
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
